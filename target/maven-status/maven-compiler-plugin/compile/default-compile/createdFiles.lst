@@ -1,0 +1,9 @@
+com/adidas/controller/FlickrPhotoSearchController.class
+com/adidas/service/PhotoRepository.class
+com/adidas/service/FlickrPhotoRetrieverImpl.class
+com/adidas/service/FlickrPhotoRetriever.class
+com/adidas/dao/Photo.class
+com/adidas/App.class
+com/adidas/dao/Photos.class
+com/adidas/dao/ResponseObject.class
+com/adidas/dao/Rsp.class

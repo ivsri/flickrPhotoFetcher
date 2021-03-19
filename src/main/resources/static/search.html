@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Adidas Challenge - Search</title>
+<!-- style sheet -->
+<link href="https://fonts.googleapis.com/css?family=Droid+Sans"
+	rel="stylesheet">
+
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<!-- main css -->
+<link rel="stylesheet" href="/css/main.css">
+
+<!-- script -->
+<script src="/scripts/jquery.js"></script>
+<script src="/scripts/jquery.maskedinput.min.js"></script>
+<script>
+	var lastSubmissionDate = 0;
+	var isRunning = false;
+	$(document)
+			.ready(
+					function() {
+
+						$('#checkBtn')
+								.click(
+										function(e) {
+											e.preventDefault()
+											var input = $("#input1").val()
+											$('#resultValue').text('')
+
+											if (!isRunning) {
+												isRunning = true;
+												$('#checkBtn').prop("disabled",
+														true);
+												var currentTime = new Date()
+														.getTime();
+
+												var timeout = 1;
+
+												if ((currentTime - lastSubmissionDate) < 2000) {
+													timeout = 10000;
+												}
+
+												setTimeout(
+														function() {
+
+															lastSubmissionDate = new Date()
+																	.getTime();
+															isRunning = false;
+															$('#checkBtn')
+																	.prop(
+																			"disabled",
+																			false);
+
+															$
+																	.ajax(
+																			{
+																				url : '/searchPhotosByTag',
+																				data : 'searchTag='
+																						+ input,
+																				method : 'GET'
+																			})
+																	.then(
+																			function(
+																					data) {
+
+																				if (data.success) {
+																					$(
+																							'#resultValue')
+																							.css(
+																									'color',
+																									'green');
+																				} else {
+																					$('#resultValue')
+																							.css(
+																									'color',
+																									'red');
+																					$('#resultValue').text(data.message);
+																				}
+
+																				for (var i = 0; i < data.photoUrls.length; i++) {
+																					$(
+																							'#resultValue')
+																							.append(
+																									'<li><img src="'+data.photoUrls[i]+'" alt="" >'
+																											+ data.titleList[i]
+																											+ '</li>')
+
+																				}
+																			});
+														}, timeout);
+											}
+
+										})
+					})
+//-->
+</script>
+
+<style>
+.result {
+	border-radius: 4px;
+	background: white;
+	border: none;
+	padding: 20px;
+	box-shadow: 0px 3px 8px -4px rgba(0, 0, 0, 0.15);
+	margin-top: 50px;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-5 offset-md-4" style="margin-top: 50px;">
+				<form class="form-inline row">
+					<h4 style="text-align: center; margin-bottom: 50px;">Flickr
+						Image Search</h4>
+
+					<div class="col-md-5 offset-md-4">
+						<h6>
+							Back to image load page - <a href="/">Load Flickr Images</a>
+						</h6>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="input"></label> <input type="text"
+							class="form-control" id="input1" style="width: 98%" value=""
+							placeholder="Enter keyword to search data">
+					</div>
+					<div class="col-md-4">
+						<button type="submit" class="btn btn-primary" id="checkBtn">Search
+							Image</button>
+					</div>
+				</form>
+			</div>
+
+
+			<div class="col-md-5 offset-md-4">
+				<div class="result">
+					Result:<span id="resultValue"></span>
+				</div>
+			</div>
+
+			<div class="col-md-5 offset-md-4">
+				<br /> <br />
+				<h5>
+					Back to image load page - <a href="/">Load Flickr Images</a>
+				</h5>
+
+			</div>
+
+			<div class="col-md-5 offset-md-4">
+				<img src="adidas.png" alt="adidas"
+					style="padding-top: 20px; display: block; margin-left: auto; margin-right: auto;" />
+
+			</div>
+		</div>
+	</div>
+</body>
+</html>
